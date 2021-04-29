@@ -7,6 +7,7 @@ import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
+import { useUser } from '../context/userContext';
 import AppNavigator from './app.routes';
 import AuthNavigador from './auth.routes';
 
@@ -16,7 +17,9 @@ const SHOW_AUTH = true;
 
 export default function Routes({ colorScheme }: { colorScheme: ColorSchemeName }) {
     
-    if(SHOW_AUTH){
+    const { logged } = useUser();
+
+    if(!logged){
         return(
             <NavigationContainer
                 theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}

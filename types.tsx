@@ -22,3 +22,7 @@ export type TabOneParamList = {
 export type TabTwoParamList = {
   TabTwoScreen: undefined;
 };
+
+export type User = {
+  
+}

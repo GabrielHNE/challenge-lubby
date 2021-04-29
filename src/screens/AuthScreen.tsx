@@ -3,12 +3,15 @@ import { AntDesign } from '@expo/vector-icons';
 import { View, Text, TextInput, Image, Alert} from 'react-native';
 import { StyleSheet } from 'react-native';
 
+import { useUser } from '../context/userContext';
+
 import Colors from '../constants/Colors';
 import Button from '../components/Button';
 
 const Logo = require('../../assets/images/adaptive-icon.png'); 
 
 export default function AuthScreen(){
+    const { updateUser } = useUser();
 
     return(
       <View style={styles.container}>
@@ -17,7 +20,8 @@ export default function AuthScreen(){
           style={styles.input}
           placeholder="Usuário"
         />
-        <Button label="" customStyle={ styles.button } onPress={()=>{Alert.alert('yeyyrgegy')}}>
+
+        <Button label="" customStyle={ styles.button } onPress={()=>{ updateUser('oi') }}>
           <Text style={styles.buttonLabel}>Entrar</Text>
           <AntDesign name="arrowright" size={30} color="black" style={{}} />
         </Button>
