@@ -24,7 +24,7 @@ export default {
   },
   dark: {
     text: '#fff',
-    background: '#000',
+    background: leadColor,
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
@@ -34,7 +34,13 @@ export default {
     backgroundDark: leadColorDark,
     text: '#FFFFFF',
     shadow: greyLighter,
-
+    yellow: yellow,
+    white: white,
+    black: black,
+    greyDark: greyDark,
+    grey: grey,
+    greyLight: greyLight,
+    greyLighter: greyLighter
 
   }
 };
