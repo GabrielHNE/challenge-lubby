@@ -29,6 +29,9 @@ export default function BottomTabNavigator() {
         component={HomeNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          tabBarBadgeStyle:{
+            backgroundColor: 'yellow'
+          }
         }}
       />
 
