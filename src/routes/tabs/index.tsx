@@ -9,6 +9,8 @@ import HomeScreen from '../../screens/HomeScreen';
 import RepoScreen from '../../screens/RepoScreen';
 import SeguidoresScreen from '../../screens/SeguidoresScreen';
 import SeguindoScreen from '../../screens/SeguindoScreen';
+import ProfileScreen from '../../screens/ProfileScreen';
+
 
 import Button from '../../components/Button';
 function LogoTitle(props:any) {
@@ -144,6 +146,18 @@ export function SeguidoresNavigator() {
           headerLeft: props => BackButtonHeader(props)
         }}
       />
+
+      <SeguidoresStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          headerStyle:{
+            backgroundColor: '#1F1F1F',
+          },
+          headerBackAccessibilityLabel:"Voltar",
+          headerLeft: props => BackButtonHeader(props)
+        }}
+      />  
     </SeguidoresStack.Navigator>
   );
 }
@@ -164,6 +178,18 @@ export function SeguindoNavigator() {
           headerLeft: props => BackButtonHeader(props)
         }}
       />
+
+      <SeguidoresStack.Screen
+        name="ProfileScreen"
+        component={ProfileScreen}
+        options={{
+          headerStyle:{
+            backgroundColor: '#1F1F1F',
+          },
+          headerBackAccessibilityLabel:"Voltar",
+          headerLeft: props => BackButtonHeader(props)
+        }}
+      />    
     </SeguindoStack.Navigator>
   );
 }
