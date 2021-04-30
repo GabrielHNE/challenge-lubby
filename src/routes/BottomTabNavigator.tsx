@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { AntDesign } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Image } from 'react-native';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
@@ -64,5 +65,4 @@ export default function BottomTabNavigator() {
 function TabBarIcon(props: { name: React.ComponentProps<typeof AntDesign>['name']; color: string }) {
   return <AntDesign size={30} style={{ marginBottom: -3 }} {...props} />;
 }
-
 

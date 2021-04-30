@@ -7,7 +7,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import styles from './styles';
 
 interface Props {
-	label: string;
+	label?: string;
 	customStyle?: any;
 	children?: ReactNode;
 	onPress?: any;
