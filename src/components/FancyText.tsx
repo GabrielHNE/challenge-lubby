@@ -4,8 +4,9 @@ import { StyleSheet, Image, Text, View} from 'react-native';
 import Colors from '../constants/Colors';
 
 type Props = {
-    text: string;
+    text?: string;
     children?: React.ReactChild;
+    componentFancy?: React.ReactNode ;
 }
 
 export default function FancyText(props: Props){
@@ -13,7 +14,12 @@ export default function FancyText(props: Props){
         <View>
             <View style={styles.fancyTextContainer}>
                 <View style={styles.afterFancy}></View>
-                <Text style={styles.fancyText}>{props.text}</Text>
+                {
+                    props.componentFancy?
+                        props.componentFancy
+                    :
+                        <Text style={styles.fancyText}>{props.text}</Text>
+                }
             </View>
 
             {
@@ -41,6 +47,8 @@ const styles = StyleSheet.create({
     },
     afterFancy:{
         width: 10,
+        position: 'relative',
+        right: 0,
         height: '100%',
         marginRight: 12,
         borderTopRightRadius: 50,

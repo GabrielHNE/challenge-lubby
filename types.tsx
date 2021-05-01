@@ -40,3 +40,10 @@ export type User = {
   followers: number;
   following: number;
 }
+
+export type Repo = {
+  name: string;
+  description: string | null;
+  stargazers_count: number | string;
+  _private:  boolean;
+}

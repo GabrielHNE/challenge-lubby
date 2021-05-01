@@ -3,32 +3,39 @@ import { StyleSheet, Image, Text, View} from 'react-native';
 
 import Colors from '../constants/Colors';
 
-type Props = {
+type dataInfo = {
+  label: string;
+  info: string | number;
+}
 
+type Props = {
+  data: Array<dataInfo>;
 };
 
 export default function SpotlighInfo(props: Props){
-    return(
-        <View style={styles.infosSpotlightContainer}>
-            {/*Seguidores*/}
-            <View style={styles.infoContainer}>
-                <Text style={styles.infoNumber}>32</Text>
-                <Text style={styles.infoText}>Seguidores</Text>
-            </View> 
-            
-            {/*Seguindo*/}
-            <View style={styles.infoContainer}>
-                <Text style={styles.infoNumber}>32</Text>
-                <Text style={styles.infoText}>Seguindo</Text>
-            </View>
-            
-            {/*Repos*/}
-            <View style={styles.infoContainer}>
-                <Text style={styles.infoNumber}>10</Text>
-                <Text style={styles.infoText}>Repos</Text>
-            </View>
+
+  function renderDatas(){
+    const datas = props.data;
+
+    return datas.map((data, index)=>{
+      return(
+        <View key={index} style={styles.infoContainer}>
+          <Text style={styles.infoNumber}>{data.info}</Text>
+          <Text style={styles.infoText}>{data.label}</Text>
         </View>
-    );
+      );
+    })
+  }
+
+  if(props.data.length === 0) return null;
+
+  return(
+      <View style={styles.infosSpotlightContainer}>
+          {
+            renderDatas()
+          }
+      </View>
+  );
 }
 
 const styles = StyleSheet.create({

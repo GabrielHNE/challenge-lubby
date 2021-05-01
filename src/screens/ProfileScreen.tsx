@@ -23,7 +23,7 @@ export default function ProfileScreen() {
         </Text>
       </FancyText>
 
-      <SpotlighInfo/>
+      {/* <SpotlighInfo/> */}
 
       <FancyText text="BIO">
         <Text style={{color: Colors.colors.grey, fontWeight: '100', textAlign: 'left'}}>

@@ -1,38 +1,56 @@
 import * as React from 'react';
 import { StyleSheet, Image, Text, View} from 'react-native';
-
+import { useUser } from '../context/userContext';
 //components
 import FancyText from '../components/FancyText';
 import SpotlighInfo from '../components/SpotlightInfo';
+import RoundImage from '../components/RoundImage';
+
 
 import Colors from '../constants/Colors';
 import { forModalPresentationIOS } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/CardStyleInterpolators';
 // import { Text, View } from '../components/Themed';
 
 export default function HomeScreen() {
+  const { user } = useUser();
+
+  //user could never be null, otherwise return null
+  if(!user) return null;
+
   return (
     <View style={styles.container}>
       {/* Component */}
       <View style={styles.headerComplement}>
-        <Image style={styles.headerComplImage}source={{uri:'https://avatars.githubusercontent.com/u/50528900?v=4'}}/>
+        <RoundImage height={128} width={128} url={`${user.avatar_url}`}/>
       </View>
 
-      <FancyText text="GABRIEL HENRIQUE">
+      <FancyText text={`${ user.name? user.name.toUpperCase() : user.login }`}>
         <Text style={{color: Colors.colors.grey, fontWeight: '100', textAlign: 'left'}}>
-          gabrielhnespindola@gmail.com{"\n"}
-          Londrina/PR
+          {user.email}{"\n"}
+          {user.location}
         </Text>
       </FancyText>
 
-      <SpotlighInfo/>
+      <SpotlighInfo data={[
+        {
+          label: 'Seguidores',
+          info: user.followers
+        },
+        {
+          label: 'Seguindo',
+          info: user.following
+        },
+        {
+          label: 'Repos',
+          info: user.public_repos
+        }
+      ]}/>
 
       <FancyText text="BIO">
         <Text style={{color: Colors.colors.grey, fontWeight: '100', textAlign: 'left'}}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Fusce lacinia et orci vitae euismod. Ut eleifend fermentum purus quis sodales.
-          Proin vel leo mollis, congue diam a, posuere eros. Morbi condimentum ut diam convallis volutpat.
-          Mauris lacus velit, accumsan ut nibh vitae, hendrerit ultricies purus. Etiam sed tellus gravida,
-          congue dolor quis, pharetra nunc.
+          {
+            user.bio? user.bio : 'Sem biografia'
+          }
         </Text>
       </FancyText>
     </View>

@@ -1,123 +1,72 @@
-import * as React from 'react';
-import { StyleSheet, Text, View, FlatList} from 'react-native';
-import { Feather, AntDesign   } from '@expo/vector-icons';
-
+import React, {useEffect, useState} from 'react';
+import { StyleSheet, Text, View, FlatList, Modal, ActivityIndicator} from 'react-native';
+import { getRepos } from '../service/api';
+import { useUser } from '../context/userContext';
 import Colors from '../constants/Colors';
-
-import FancyText from '../components/FancyText';
-import SpotlighInfo from '../components/SpotlightInfo';
-const REPOS = [
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  },
-  {
-    text: 'brasiliapp-react-native'
-  }
-];
-
-function Separator(){
-  return(
-    <View style={styles.separator} />
-  );
-}
+import  { Repo } from '../../types';
+//components
+import ReposCard from '../components/ReposCard';
+import Separator from '../components/Separator';
 
 export default function RepoScreen() {
+  const { user } = useUser();
+  const [ repos, setRepos ] = useState<Array<Repo> | null>(null);
+  const [ isLoading, setIsloading ] = useState<boolean>(false);
 
-  const renderItem = ({ item, index }:any) => {
-    console.log(index);
-    return (
-        <FancyText
-          key={index}
-          text={item.text}
+  if(!user) return null;
+
+  //maybe save it or call it on login?
+  useEffect(()=>{
+    (async ()=>{
+      setIsloading(true);
+      try{
+        const res = await getRepos(user.login);
+        setRepos(res);
+      }catch(e){
+        console.log('oiioi', e);
+      }finally{
+        setIsloading(false);
+      }
+    })()
+  }, []);
+
+  function showLoading(){
+    return(
+      <View style={{alignItems: 'center', justifyContent: 'center'}}>
+        <ActivityIndicator size="large" color={Colors.colors.yellow}/>
+      </View>
+    );
+  }
+
+  function EmptyList(){
+    if(isLoading){
+      return showLoading();
+    }
+
+    return(
+      <View 
+        style={{
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Text 
+          style={{
+            color: 'white',
+            fontSize:32,
+            fontWeight: 'bold'
+          }}
         >
-          <>
-            <Text style={{color:'grey'}}>
-              Repository for centralization of the BrasiliApp{"\n"}
-              Mobile Project
-            </Text>
-            <View 
-              style={{
-                flexDirection: 'row',
-                alignItems:'center',
-                justifyContent: 'space-between',
-                marginTop: 10
-              }}
-            >
-              <View  style={{
-                  flexDirection: 'row',
-                  alignItems:'center'
-                }}
-              >
-                <Feather name="star" size={24} color="yellow" />
-                <Text
-                  style={{
-                    color: 'white',
-                    fontSize: 18
-                  }}
-                >
-                  32
-                </Text>
-              </View>
-              <View  style={{
-                  flexDirection: 'row',
-                  alignItems:'center'
-                }}
-              >
-                <AntDesign name="unlock" size={24} color="green" />
-                <AntDesign name="lock1" size={24} color="red" />
-              </View>
+          Sem repositórios
+        </Text>
+      </View>
+  
+    )
+  }
 
-            </View>
-          </>
-        </FancyText>
+  const renderItem = ({ item, index }:{item:Repo, index:number|string}) => {
+    return (
+      <ReposCard key={index} name={item.name} details={item.description} stars={item.stargazers_count}/>
     );
   };
 
@@ -125,10 +74,13 @@ export default function RepoScreen() {
     <View style={styles.container}>
       
       <FlatList 
-        data={REPOS}
+        data={repos}
         renderItem={renderItem}
         ItemSeparatorComponent={Separator}
+        keyExtractor={(item, index) => index.toString()}
+        ListEmptyComponent={EmptyList}
       />
+
     </View>
   );
 }
@@ -140,11 +92,5 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     backgroundColor: Colors.colors.background,
     paddingTop: 50
-  },
-  separator: {
-    marginVertical: 40,
-    height: 1,
-    width: '100%',
-    backgroundColor: Colors.colors.greyLight
-  },
+  }
 });

@@ -1,9 +1,10 @@
 import React, { createContext, useState, useEffect, useContext, ReactPropTypes} from 'react';
+import { User } from '../../types';
+const UserContext = createContext({} as Values);
 
-const UserContext = createContext({} as User);
-
-type User = {
+type Values = {
     logged: boolean;
+    user: User | null,
     updateUser: any;
     signOut: any;
     setLoading: any;
@@ -22,6 +23,7 @@ export function UserProvider({ children }: any){
         <UserContext.Provider
             value={{
                 logged:!!user,
+                user,
                 updateUser: setUser,
                 signOut,
                 setLoading: setIsLoading,
