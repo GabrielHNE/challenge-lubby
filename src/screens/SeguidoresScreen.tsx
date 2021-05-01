@@ -27,15 +27,30 @@ export default function SeguidoresScreen() {
       setIsloading(true);
       try{
         const res = await getFollowersAsUsers(user.login);
-        console.log('followers', res);
+        // console.log('followers', res);
         setFollowers(res);
       }catch(e){
-        console.log('oiioi', e);
+        console.log('erro', e);
       }finally{
         setIsloading(false);
       }
     })()
   }, []);
+
+  useEffect(()=>{
+    (async ()=>{
+      setIsloading(true);
+      try{
+        const res = await getFollowersAsUsers(user.login);
+        // console.log('followers', res);
+        setFollowers(res);
+      }catch(e){
+        console.log('erro', e);
+      }finally{
+        setIsloading(false);
+      }
+    })()
+  }, [user]);
 
   function showLoading(){
     return(
@@ -78,7 +93,7 @@ export default function SeguidoresScreen() {
         key={index}
         name={`${item.login}`}
         avatar={`${item.avatar_url}`}
-        onPress={() => navigation.navigate('ProfileScreen')}
+        onPress={() => navigation.navigate('ProfileScreen', {user: item})}
       />
     );
   };

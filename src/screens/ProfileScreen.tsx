@@ -1,5 +1,6 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Image, Text, View} from 'react-native';
+import { User } from '../../types';
 
 //components
 import FancyText from '../components/FancyText';
@@ -8,30 +9,50 @@ import SpotlighInfo from '../components/SpotlightInfo';
 import Colors from '../constants/Colors';
 // import { Text, View } from '../components/Themed';
 
-export default function ProfileScreen() {
+export default function ProfileScreen(props:any) {
+  const [someone, setSomeone] =  useState<User | null>(null);
+
+  useEffect(()=>{
+    //trying to avoid another api call
+    if(props.route.params.user){
+      setSomeone(props.route.params.user);
+    }
+  },[])
+
   return (
     <View style={styles.container}>
       {/* Component */}
       <View style={styles.headerComplement}>
-        <Image style={styles.headerComplImage}source={{uri:'https://avatars.githubusercontent.com/u/50528900?v=4'}}/>
+          <Image style={styles.headerComplImage}source={{uri:`${someone?.avatar_url}`}}/>
       </View>
 
-      <FancyText text="GABRIEL HENRIQUE">
+      <FancyText text={someone?.name? someone?.name : someone?.login}>
         <Text style={{color: Colors.colors.grey, fontWeight: '100', textAlign: 'left'}}>
-          gabrielhnespindola@gmail.com{'\n'}
-          Londrina/PR
+          {someone?.email}{'\n'}
+          {someone?.location}
         </Text>
       </FancyText>
 
-      {/* <SpotlighInfo/> */}
+      <SpotlighInfo
+        data={[
+          {
+            label: 'Seguidores',
+            info: someone?.followers? someone?.followers : 0
+          },
+          {
+            label: 'Seguindo',
+            info: someone?.following? someone?.following : 0
+          },
+          {
+            label: 'Repos',
+            info: someone?.public_repos? someone?.public_repos : 0
+          }
+        ]}
+      />
 
       <FancyText text="BIO">
         <Text style={{color: Colors.colors.grey, fontWeight: '100', textAlign: 'left'}}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-          Fusce lacinia et orci vitae euismod. Ut eleifend fermentum purus quis sodales.
-          Proin vel leo mollis, congue diam a, posuere eros. Morbi condimentum ut diam convallis volutpat.
-          Mauris lacus velit, accumsan ut nibh vitae, hendrerit ultricies purus. Etiam sed tellus gravida,
-          congue dolor quis, pharetra nunc.
+          {someone?.bio}
         </Text>
       </FancyText>
     </View>

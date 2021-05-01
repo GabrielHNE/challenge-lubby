@@ -91,7 +91,7 @@ export async function getFollowersAsUsers(username: string):Promise<Array<User> 
             return null;
         }
 
-        console.log('inside api', res.data);
+        // console.log('inside api', res.data);
         
         //not all info come with this url, need to nest other call inside
         let newArr = [];
@@ -123,7 +123,7 @@ export async function getFollowingAsUsers(username: string):Promise<Array<User> 
             return null;
         }
 
-        console.log('inside api', res.data);
+        // console.log('inside api', res.data);
         
         //not all info come with this url, need to nest other call inside
         let newArr = [];

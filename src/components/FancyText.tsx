@@ -58,7 +58,9 @@ const styles = StyleSheet.create({
     fancyText:{
         fontSize: 30,
         fontWeight: 'bold',
-        color: Colors.colors.white
+        color: Colors.colors.white,
+        maxWidth: '80%',
+        overflow: 'hidden'
     },
     fancyDescription:{
         marginLeft: 22,

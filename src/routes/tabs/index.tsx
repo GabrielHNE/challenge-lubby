@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Alert, Image, Text, View } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { HeaderBackButton } from '@react-navigation/stack';
-import { useNavigation } from '@react-navigation/native';
-import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation, StackActions } from '@react-navigation/native';
+import { MaterialIcons, Feather } from '@expo/vector-icons';
 
 import HomeScreen from '../../screens/HomeScreen';
 import RepoScreen from '../../screens/RepoScreen';
@@ -15,13 +15,78 @@ import { useUser } from '../../context/userContext';
 
 import Button from '../../components/Button';
 function LogoTitle(props:any) {
+
   return (
-    // <Image
-    //   style={{ width: 50, height: 50, backgroundColor: 'pink'}}
-    //   source={require('../../../assets/images/adaptive-icon.png')}
-    // />
-    <></>
+    <Text
+      style={{
+        maxWidth: 150,
+        color: 'white',
+        fontSize: 16,
+        alignItems: 'center'
+      }}
+    >
+      #{props.route.params.user.login}
+    </Text>
+    
   );
+}
+
+function InfoTitle(props:any){
+  const {user} = useUser();
+
+  switch(props.title){
+    case 'Repositórios':{
+      return (
+        <Text
+          style={{
+            maxWidth: 150,
+            color: 'white',
+            fontSize: 16,
+            alignItems: 'center',
+            overflow: 'hidden'
+          }}
+        >
+          {user?.public_repos} {props.title}
+        </Text>
+      );
+    }
+    case 'Seguidores':{
+      return (
+        <Text
+          style={{
+            maxWidth: 150,
+            color: 'white',
+            fontSize: 16,
+            alignItems: 'center',
+            overflow: 'hidden'
+          }}
+        >
+          {user?.followers} {props.title}
+        </Text>
+      );
+    }
+    case 'Seguindo':{
+      return (
+        <Text
+          style={{
+            maxWidth: 150,
+            color: 'white',
+            fontSize: 16,
+            alignItems: 'center',
+            overflow: 'hidden'
+          }}
+        >
+          {user?.following} {props.title}
+        </Text>
+      );
+    }
+  }
+  
+  return <></>;
+}
+//gambiarrinha
+function LogoNoTitle(props: any){
+  return <></>;
 }
 
 function SignOutHeader(props: any){
@@ -46,6 +111,39 @@ function SignOutHeader(props: any){
           Sair
         </Text>
         <MaterialIcons name="logout" size={24} color="red" />
+      </Button> 
+    </>
+  );
+}
+
+function SaveUser(props: any){
+  const { user, updateUser } = useUser();
+  return(
+    <>
+      <Button customStyle={{
+          flexDirection:'row',
+            alignItems:'center',
+            justifyContent: 'flex-end',
+            width: 100
+          }}
+          onPress={()=>{
+            if(props.route.params){
+              updateUser(props.route.params.user);
+              // props.navigation.navigate('Home');
+              props.navigation.dispatch(StackActions.popToTop());
+            }
+          }}
+      >
+        <Text style={{ 
+            color:'white',
+            fontSize: 20,
+            textAlign: 'center',
+            marginRight: 5
+          }}
+        >
+          Salvar
+        </Text>
+        <Feather name="log-in" size={24} color="green" />
       </Button>
       
     </>
@@ -53,16 +151,19 @@ function SignOutHeader(props: any){
 }
 
 function UserNameHeader(props:any){
+  const { user } = useUser();
   return (
     <Text
       style={{ 
         color:'white',
         fontSize: 20,
         textAlign: 'center',
-        marginRight: 5
+        marginRight: 5,
+        maxWidth:  150,
+        overflow: 'hidden'
       }}
     >
-      #anilton.veiga
+      #{user?.login}
     </Text>
   );
 }
@@ -93,7 +194,7 @@ export function HomeNavigator() {
             shadowOpacity: 0,
           },
           headerTitleAlign: 'center',
-          headerTitle: props => <LogoTitle {...props}/>,
+          headerTitle: props => <LogoNoTitle {...props}/>,
           headerLeft: props => <UserNameHeader {...props}/>,
           headerLeftContainerStyle:{
             alignItems:'center',
@@ -124,6 +225,8 @@ export function RepoNavigator() {
           headerStyle:{
             backgroundColor: '#1F1F1F',
           },
+          headerTitleAlign: 'center',
+          headerTitle: (props) => <InfoTitle {...props} title="Repositórios"/>,
           headerBackAccessibilityLabel:"Voltar",
           headerLeft: props => BackButtonHeader(props)
         }}
@@ -144,6 +247,8 @@ export function SeguidoresNavigator() {
           headerStyle:{
             backgroundColor: '#1F1F1F',
           },
+          headerTitleAlign: 'center',
+          headerTitle: (props) => <InfoTitle {...props} title="Seguidores"/>,
           headerBackAccessibilityLabel:"Voltar",
           headerLeft: props => BackButtonHeader(props)
         }}
@@ -152,13 +257,24 @@ export function SeguidoresNavigator() {
       <SeguidoresStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        options={{
-          headerStyle:{
-            backgroundColor: '#1F1F1F',
-          },
-          headerBackAccessibilityLabel:"Voltar",
-          headerLeft: props => BackButtonHeader(props)
-        }}
+        options={( props )=>({
+            headerStyle:{
+              backgroundColor: '#1F1F1F',
+              elevation: 0, // remove shadow on Android
+              shadowOpacity: 0,
+            },
+            headerTitleAlign: 'center',
+            headerTitle: () => <LogoTitle {...props}/>,
+            headerBackAccessibilityLabel:"Voltar",
+            headerLeft: props => BackButtonHeader(props),
+            headerRight: () => <SaveUser {...props}/>,
+            headerRightContainerStyle:{
+              alignItems:'center',
+              justifyContent: 'center',
+              padding: 8
+            }
+          })
+        }
       />  
     </SeguidoresStack.Navigator>
   );
@@ -176,6 +292,8 @@ export function SeguindoNavigator() {
           headerStyle:{
             backgroundColor: '#1F1F1F',
           },
+          headerTitleAlign: 'center',
+          headerTitle: (props) => <InfoTitle {...props} title="Seguidores"/>,
           headerBackAccessibilityLabel:"Voltar",
           headerLeft: props => BackButtonHeader(props)
         }}
@@ -184,13 +302,23 @@ export function SeguindoNavigator() {
       <SeguidoresStack.Screen
         name="ProfileScreen"
         component={ProfileScreen}
-        options={{
-          headerStyle:{
-            backgroundColor: '#1F1F1F',
-          },
-          headerBackAccessibilityLabel:"Voltar",
-          headerLeft: props => BackButtonHeader(props)
-        }}
+        options={( props )=>({
+            headerStyle:{
+              backgroundColor: '#1F1F1F',
+              elevation: 0, // remove shadow on Android
+              shadowOpacity: 0,
+            },
+            headerTitleAlign: 'center',
+            headerBackAccessibilityLabel:"Voltar",
+            headerLeft: props => BackButtonHeader(props),
+            headerRight: () => <SaveUser {...props}/>,
+            headerRightContainerStyle:{
+              alignItems:'center',
+              justifyContent: 'center',
+              padding: 8
+            }
+          })
+        }
       />    
     </SeguindoStack.Navigator>
   );

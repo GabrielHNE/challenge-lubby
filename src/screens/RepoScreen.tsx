@@ -23,12 +23,26 @@ export default function RepoScreen() {
         const res = await getRepos(user.login);
         setRepos(res);
       }catch(e){
-        console.log('oiioi', e);
+        console.log('Erro', e);
       }finally{
         setIsloading(false);
       }
     })()
   }, []);
+
+  useEffect(()=>{
+    (async ()=>{
+      setIsloading(true);
+      try{
+        const res = await getRepos(user.login);
+        setRepos(res);
+      }catch(e){
+        console.log('Erro', e);
+      }finally{
+        setIsloading(false);
+      }
+    })()
+  }, [user]);
 
   function showLoading(){
     return(

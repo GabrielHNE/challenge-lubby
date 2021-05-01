@@ -37,6 +37,21 @@ export default function SeguindoScreen() {
     })()
   }, []);
 
+  useEffect(()=>{
+    (async ()=>{
+      setIsloading(true);
+      try{
+        const res = await getFollowingAsUsers(user.login);
+        // console.log('getFollowingAsUsers', res);
+        setFollowing(res);
+      }catch(e){
+        console.log('oiioi', e);
+      }finally{
+        setIsloading(false);
+      }
+    })()
+  }, [user]);
+
   function showLoading(){
     return(
       <View style={{alignItems: 'center', justifyContent: 'center'}}>
