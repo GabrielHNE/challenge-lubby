@@ -18,7 +18,7 @@ export default function ProfileScreen() {
 
       <FancyText text="GABRIEL HENRIQUE">
         <Text style={{color: Colors.colors.grey, fontWeight: '100', textAlign: 'left'}}>
-          gabrielhnespindola@gmail.com
+          gabrielhnespindola@gmail.com{'\n'}
           Londrina/PR
         </Text>
       </FancyText>

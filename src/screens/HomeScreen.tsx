@@ -6,6 +6,7 @@ import FancyText from '../components/FancyText';
 import SpotlighInfo from '../components/SpotlightInfo';
 
 import Colors from '../constants/Colors';
+import { forModalPresentationIOS } from '@react-navigation/stack/lib/typescript/src/TransitionConfigs/CardStyleInterpolators';
 // import { Text, View } from '../components/Themed';
 
 export default function HomeScreen() {
@@ -18,7 +19,7 @@ export default function HomeScreen() {
 
       <FancyText text="GABRIEL HENRIQUE">
         <Text style={{color: Colors.colors.grey, fontWeight: '100', textAlign: 'left'}}>
-          gabrielhnespindola@gmail.com
+          gabrielhnespindola@gmail.com{"\n"}
           Londrina/PR
         </Text>
       </FancyText>

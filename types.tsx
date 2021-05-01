@@ -24,5 +24,19 @@ export type TabTwoParamList = {
 };
 
 export type User = {
-  
+  login: string;
+  name: string;
+  email: string | null;
+  location: string | null;
+  company: string | null;
+  bio: string | null;
+  avatar_url: string;
+  followers_url: string;
+  following_url: string;
+  organizations_url: string;
+  starred_url: string;
+  public_repos: string;
+  public_gists: string;
+  followers: number;
+  following: number;
 }

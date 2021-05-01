@@ -11,6 +11,7 @@ import SeguidoresScreen from '../../screens/SeguidoresScreen';
 import SeguindoScreen from '../../screens/SeguindoScreen';
 import ProfileScreen from '../../screens/ProfileScreen';
 
+import { useUser } from '../../context/userContext';
 
 import Button from '../../components/Button';
 function LogoTitle(props:any) {
@@ -24,6 +25,7 @@ function LogoTitle(props:any) {
 }
 
 function SignOutHeader(props: any){
+  const{ signOut} = useUser();
   return(
     <>
       <Button customStyle={{
@@ -32,7 +34,7 @@ function SignOutHeader(props: any){
             justifyContent: 'flex-end',
             width: 100
           }}
-          onPress={()=>{Alert.alert('Signout?')}}
+          onPress={signOut}
       >
         <Text style={{ 
             color:'white',
@@ -75,10 +77,10 @@ function BackButtonHeader(props:any){
   />
 }
 
-
 const HomeStack = createStackNavigator();
 
 export function HomeNavigator() {
+  
   return (
     <HomeStack.Navigator>
       <HomeStack.Screen

@@ -19,9 +19,15 @@ export default function BottomTabNavigator() {
         style:{
           backgroundColor: '#FFFFFF',
           borderTopLeftRadius: 16,
-          borderTopRightRadius: 16
+          borderTopRightRadius: 16,
+          height: 70,
+          paddingVertical: 10
         },
-        activeTintColor: 'black' 
+        activeTintColor: 'black',
+        labelPosition: 'below-icon',
+        labelStyle: {
+          fontSize: 16
+        }
       }}
     >
       <BottomTab.Screen

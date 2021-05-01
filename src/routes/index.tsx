@@ -4,6 +4,7 @@
  *
  */
 import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
+import { isLoading } from 'expo-font';
 import * as React from 'react';
 import { ColorSchemeName } from 'react-native';
 
@@ -17,9 +18,10 @@ const SHOW_AUTH = true;
 
 export default function Routes({ colorScheme }: { colorScheme: ColorSchemeName }) {
     
-    const { logged } = useUser();
+    const user = useUser();
 
-    if(!logged){
+    //isLoading is to prevent react state on unmounted component 
+    if(!user.logged || user.isLoading){
         return(
             <NavigationContainer
                 theme={colorScheme === 'dark' ? DarkTheme : DefaultTheme}

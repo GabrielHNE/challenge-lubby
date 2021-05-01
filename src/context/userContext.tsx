@@ -5,16 +5,27 @@ const UserContext = createContext({} as User);
 type User = {
     logged: boolean;
     updateUser: any;
+    signOut: any;
+    setLoading: any;
+    isLoading: boolean;
 }
 
 export function UserProvider({ children }: any){
-    const [user, setUser] = useState<User | null>(null);
+    const [ user, setUser ] = useState<User | null>(null);
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
+
+    function signOut(){
+        setUser(null);
+    }
 
     return(
         <UserContext.Provider
             value={{
                 logged:!!user,
-                updateUser: setUser
+                updateUser: setUser,
+                signOut,
+                setLoading: setIsLoading,
+                isLoading
             }}
         >
             {children}

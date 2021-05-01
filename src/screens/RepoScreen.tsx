@@ -63,11 +63,17 @@ const REPOS = [
   }
 ];
 
+function Separator(){
+  return(
+    <View style={styles.separator} />
+  );
+}
+
 export default function RepoScreen() {
 
   const renderItem = ({ item, index }:any) => {
+    console.log(index);
     return (
-      <>
         <FancyText
           key={index}
           text={item.text}
@@ -112,10 +118,6 @@ export default function RepoScreen() {
             </View>
           </>
         </FancyText>
-
-        <View style={styles.separator} />
-        
-      </>
     );
   };
 
@@ -125,6 +127,7 @@ export default function RepoScreen() {
       <FlatList 
         data={REPOS}
         renderItem={renderItem}
+        ItemSeparatorComponent={Separator}
       />
     </View>
   );
