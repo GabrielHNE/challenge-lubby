@@ -18,7 +18,11 @@ export default function FancyText(props: Props){
                     props.componentFancy?
                         props.componentFancy
                     :
-                        <Text style={styles.fancyText}>{props.text}</Text>
+                        <Text 
+                            style={styles.fancyText}
+                            numberOfLines={1}
+                            ellipsizeMode='tail'
+                        >{props.text}</Text>
                 }
             </View>
 

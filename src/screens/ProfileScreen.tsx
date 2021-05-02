@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Image, Text, View} from 'react-native';
+import { StyleSheet, Image, Text, View, ActivityIndicator, Modal} from 'react-native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import { User } from '../../types';
+import { getUserByName } from '../service/api';
+import { useUser } from '../context/userContext';
 
 //components
 import FancyText from '../components/FancyText';
@@ -10,14 +13,52 @@ import Colors from '../constants/Colors';
 // import { Text, View } from '../components/Themed';
 
 export default function ProfileScreen(props:any) {
+  const navigation = useNavigation();
+  const { setTmpUser } = useUser();
   const [someone, setSomeone] =  useState<User | null>(null);
+  const [isLoading, setIsLoading] =  useState<boolean>(false);
+
 
   useEffect(()=>{
-    //trying to avoid another api call
-    if(props.route.params.user){
-      setSomeone(props.route.params.user);
-    }
-  },[])
+    
+    (async()=>{
+      if(props.route.params.login){
+        setIsLoading(true);
+        try{
+          const res = await getUserByName(props.route.params.login);
+          if(res){ 
+            setSomeone(res);
+            setTmpUser(res);
+          }
+          else{ 
+            navigation.dispatch(StackActions.popToTop());
+          }
+        } catch(e){
+          console.log(e);
+        } finally{
+          setIsLoading(false);
+        }
+      }else{
+        //go to home and destroy all the other pages
+        navigation.dispatch(StackActions.popToTop());
+      }
+    })()
+      
+  },[]);
+
+  function showLoading(){
+    return(
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={isLoading}
+      >
+        <View style={styles.modal}>
+          <ActivityIndicator size="large" color={Colors.colors.yellow}/>
+        </View>
+      </Modal>
+    );
+  }
 
   return (
     <View style={styles.container}>
@@ -55,6 +96,10 @@ export default function ProfileScreen(props:any) {
           {someone?.bio}
         </Text>
       </FancyText>
+
+      {
+        showLoading()
+      }
     </View>
   );
 }
@@ -113,6 +158,13 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 30,
     fontWeight: 'bold'
+  },
+  modal:{
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#000000aa',
+    
   }
   
 });

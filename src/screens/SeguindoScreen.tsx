@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { StyleSheet, Image, View, Text, FlatList, ActivityIndicator} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import { useUser } from '../context/userContext';
-import { getFollowingAsUsers } from '../service/api';
+import { getFollowing } from '../service/api';
 import { User } from '../../types';
 
 import Colors from '../constants/Colors';
@@ -18,19 +18,23 @@ export default function SeguindoScreen() {
   const navigation = useNavigation();
   
   const [ isLoading, setIsloading ] = useState<boolean>(false);
-  const [ following, setFollowing ] = useState<Array<User> | null>(null);
+  const [ following, setFollowing ] = useState<Array<any> | null>(null);
 
   if(!user) return null;
 
   useEffect(()=>{
+    //todo -> create a function
     (async ()=>{
       setIsloading(true);
       try{
-        const res = await getFollowingAsUsers(user.login);
-        // console.log('getFollowingAsUsers', res);
-        setFollowing(res);
+        const res = await getFollowing(user.login);
+        if(res!= null){
+          setFollowing(res);
+        }else{
+          navigation.dispatch(StackActions.popToTop());
+        }
       }catch(e){
-        console.log('oiioi', e);
+        console.log('erro', e);
       }finally{
         setIsloading(false);
       }
@@ -41,11 +45,14 @@ export default function SeguindoScreen() {
     (async ()=>{
       setIsloading(true);
       try{
-        const res = await getFollowingAsUsers(user.login);
-        // console.log('getFollowingAsUsers', res);
-        setFollowing(res);
+        const res = await getFollowing(user.login);
+        if(res!= null){
+          setFollowing(res);
+        }else{
+          navigation.dispatch(StackActions.popToTop());
+        }
       }catch(e){
-        console.log('oiioi', e);
+        console.log('erro', e);
       }finally{
         setIsloading(false);
       }
@@ -86,22 +93,21 @@ export default function SeguindoScreen() {
     )
   }
 
-  const renderItem = ({ item, index }:{item:User, index:number|string}) => {
+  const renderItem = ({ item, index }:{item:any, index:number|string}) => {
     return (
       // <ReposCard key={index} name={item.name} details={item.description} stars={item.stargazers_count}/>
       <UserCard 
         key={index}
         name={`${item.login}`}
         avatar={`${item.avatar_url}`}
-        onPress={() => navigation.navigate('ProfileScreen')}
+        onPress={() => navigation.navigate('ProfileScreen', {login: item.login})}
       />
     );
   };
 
   return (
     <View style={styles.container}>
-      
-      
+
       <FlatList 
         data={following}
         renderItem={renderItem}

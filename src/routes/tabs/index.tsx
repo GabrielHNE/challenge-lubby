@@ -25,7 +25,7 @@ function LogoTitle(props:any) {
         alignItems: 'center'
       }}
     >
-      #{props.route.params.user.login}
+      #{props.route.params.login}
     </Text>
     
   );
@@ -117,7 +117,7 @@ function SignOutHeader(props: any){
 }
 
 function SaveUser(props: any){
-  const { user, updateUser } = useUser();
+  const { tmpUser, setTmpUser, updateUser } = useUser();
   return(
     <>
       <Button customStyle={{
@@ -127,8 +127,9 @@ function SaveUser(props: any){
             width: 100
           }}
           onPress={()=>{
-            if(props.route.params){
-              updateUser(props.route.params.user);
+            if(tmpUser){
+              updateUser(tmpUser);
+              setTmpUser(null);
               // props.navigation.navigate('Home');
               props.navigation.dispatch(StackActions.popToTop());
             }
@@ -145,7 +146,6 @@ function SaveUser(props: any){
         </Text>
         <Feather name="log-in" size={24} color="green" />
       </Button>
-      
     </>
   );
 }
@@ -162,6 +162,8 @@ function UserNameHeader(props:any){
         maxWidth:  150,
         overflow: 'hidden'
       }}
+      numberOfLines={1}
+      ellipsizeMode='tail'
     >
       #{user?.login}
     </Text>
@@ -293,7 +295,7 @@ export function SeguindoNavigator() {
             backgroundColor: '#1F1F1F',
           },
           headerTitleAlign: 'center',
-          headerTitle: (props) => <InfoTitle {...props} title="Seguidores"/>,
+          headerTitle: (props) => <InfoTitle {...props} title="Seguindo"/>,
           headerBackAccessibilityLabel:"Voltar",
           headerLeft: props => BackButtonHeader(props)
         }}

@@ -25,7 +25,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#292929"
-      }
+      },
+      "package": "com.gabrielhne.gitLub"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"

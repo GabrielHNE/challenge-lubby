@@ -1,14 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import { StyleSheet, Image, View, Text, FlatList, ActivityIndicator} from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, StackActions } from '@react-navigation/native';
 import { useUser } from '../context/userContext';
-import { getFollowersAsUsers } from '../service/api';
-import { User } from '../../types';
+import { getFollowers } from '../service/api';
 
 import Colors from '../constants/Colors';
 
 //components
-import FancyText from '../components/FancyText';
 import Separator from '../components/Separator';
 import UserCard from '../components/UserCard';
 
@@ -18,39 +16,37 @@ export default function SeguidoresScreen() {
   const navigation = useNavigation();
   
   const [ isLoading, setIsloading ] = useState<boolean>(false);
-  const [ followers, setFollowers ] = useState<Array<User> | null>(null);
-
-  if(!user) return null;
+  const [ followers, setFollowers ] = useState<Array<any> | null>(null);
+  const [page, setPage] = useState(1);
 
   useEffect(()=>{
     (async ()=>{
-      setIsloading(true);
-      try{
-        const res = await getFollowersAsUsers(user.login);
-        // console.log('followers', res);
-        setFollowers(res);
-      }catch(e){
-        console.log('erro', e);
-      }finally{
-        setIsloading(false);
-      }
+      await  handleList(1);
     })()
   }, []);
 
   useEffect(()=>{
     (async ()=>{
-      setIsloading(true);
+      await  handleList(1);
+    })()
+  }, [user]);
+
+  async function handleList(page=1){
+    setIsloading(true);
       try{
-        const res = await getFollowersAsUsers(user.login);
-        // console.log('followers', res);
-        setFollowers(res);
+        if(!user) {return navigation.dispatch(StackActions.popToTop());};
+        const res = await getFollowers(user.login, page);
+        if(res!= null){
+          setFollowers(res);
+        }else{
+          navigation.dispatch(StackActions.popToTop());
+        }
       }catch(e){
         console.log('erro', e);
       }finally{
         setIsloading(false);
       }
-    })()
-  }, [user]);
+  }
 
   function showLoading(){
     return(
@@ -86,14 +82,15 @@ export default function SeguidoresScreen() {
     )
   }
 
-  const renderItem = ({ item, index }:{item:User, index:number|string}) => {
+  const renderItem = ({ item, index }:{item:any, index:number|string}) => {
+    //work on it to render with better performance
     return (
       // <ReposCard key={index} name={item.name} details={item.description} stars={item.stargazers_count}/>
       <UserCard 
         key={index}
         name={`${item.login}`}
         avatar={`${item.avatar_url}`}
-        onPress={() => navigation.navigate('ProfileScreen', {user: item})}
+        onPress={() => navigation.navigate('ProfileScreen', {login: item.login})}
       />
     );
   };
@@ -106,6 +103,10 @@ export default function SeguidoresScreen() {
         ItemSeparatorComponent={Separator}
         keyExtractor={(item, index) => index.toString()}
         ListEmptyComponent={EmptyList}
+        // onEndReached={async (info)=>{
+        //   await handleList(page);
+        //   setPage(page + 1);
+        // }}
       />
     </View>
   );

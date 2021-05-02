@@ -9,10 +9,13 @@ type Values = {
     signOut: any;
     setLoading: any;
     isLoading: boolean;
+    tmpUser: User | null;
+    setTmpUser: any;
 }
 
 export function UserProvider({ children }: any){
     const [ user, setUser ] = useState<User | null>(null);
+    const [ tmpUser, setTmpUser ] = useState<User | null>(null);
     const [ isLoading, setIsLoading ] = useState<boolean>(false);
 
     function signOut(){
@@ -27,7 +30,9 @@ export function UserProvider({ children }: any){
                 updateUser: setUser,
                 signOut,
                 setLoading: setIsLoading,
-                isLoading
+                isLoading,
+                tmpUser,
+                setTmpUser
             }}
         >
             {children}

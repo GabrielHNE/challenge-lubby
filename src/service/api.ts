@@ -77,12 +77,12 @@ export async function getRepos(username: string):Promise<Array<Repo> | null>{
     }
 }
 
-export async function getFollowersAsUsers(username: string):Promise<Array<User> | null>{
+export async function getFollowers(username: string, page=1):Promise<Array<User> | null>{
     // https://api.github.com/users/gabrielhne/followers
 
     try{
         //use fetch, the url already come with full path
-        const res = await api.get(`/users/${username}/followers`,{
+        const res = await api.get(`/users/${username}/followers?${page}`,{
             method: 'GET'
         });
 
@@ -91,25 +91,18 @@ export async function getFollowersAsUsers(username: string):Promise<Array<User> 
             return null;
         }
 
-        // console.log('inside api', res.data);
-        
-        //not all info come with this url, need to nest other call inside
-        let newArr = [];
-        for(let i = 0; i < res.data.length; i++){
-            const fol = res.data[i];
-            const user = await getUserByName(fol.login);
+        let newArr = res.data.map( (info:any) => {
+            const {login, avatar_url} = info;
+            return {login, avatar_url}
+        })
 
-            if(user != null) newArr.push(user);
-        }
-       
-
-        return newArr; //array
+        return newArr//array
     }catch(e){
         throw new Error(e);
     }
 }
 
-export async function getFollowingAsUsers(username: string):Promise<Array<User> | null>{
+export async function getFollowing(username: string, page=1):Promise<Array<any> | null>{
     // https://api.github.com/users/gabrielhne/followers
 
     try{
@@ -124,18 +117,12 @@ export async function getFollowingAsUsers(username: string):Promise<Array<User> 
         }
 
         // console.log('inside api', res.data);
-        
-        //not all info come with this url, need to nest other call inside
-        let newArr = [];
-        for(let i = 0; i < res.data.length; i++){
-            const fol = res.data[i];
-            const user = await getUserByName(fol.login);
+        let newArr = res.data.map( (info:any) => {
+            const {login, avatar_url} = info;
+            return {login, avatar_url}
+        })
 
-            if(user != null) newArr.push(user);
-        }
-       
-
-        return newArr; //array
+        return newArr//array
     }catch(e){
         throw new Error(e);
     }
